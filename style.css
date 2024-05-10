@@ -1,0 +1,35 @@
+body {
+    background-color: #E5EEF4;
+  }
+  
+  body::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .flexBox::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .nav-pills .nav-link {
+    font-size: medium;
+    padding: 3px 10px !important;
+  }
+  
+  .nav-pills .nav-link.active {
+    background-color: #72b4ca !important;
+    /* padding: 0px 10px !important; */
+    border-radius: 50px;
+  }
+  
+  .dropdown-item {
+    cursor: pointer;
+  }
+  
+  .dbba {
+    padding: 0.5rem;
+  }
+  
+  .dbba:hover {
+    background-color: #ecf9fe;
+    cursor: pointer;
+  }

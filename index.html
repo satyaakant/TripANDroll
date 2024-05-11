@@ -58,6 +58,7 @@
             </li>
           </ul>
         </div>
+        
         <div class="border-end px-2 position-relative dbba" style="width: 350px;">
           <div onclick="toggleDropdown()">
             <span>City, property name or location</span>
@@ -80,13 +81,45 @@
             </div>
           </div>
         </div>
-        <div class="p-2 dbba" style="width: 300px;">
-          <div class="roomGuests">
-            <span data-cy="guestLabel" class="lbl_input appendBottom5">Rooms &amp; Guests</span>
-            <p id="defaultInfo" class="blackText font18 code truncate mt-2 ms-3">Rooms: 0, Adults: 0, Children: 0</p>
-            <div class="roomData" id="roomData"></div>
+
+          <div class="dropdown border-end px-2 position-relative dbba" style="overflow-x: scroll" display="block"; >
+              <span class="btn btn-light dropdown-toggle form-control"  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                  Rooms & Guests
+              </span>
+              <div class="dropdown-menu p-3" style="width: 100%;">
+                  <form>
+                      <div class="mb-3">
+                          <label for="rooms-select" class="form-label">Rooms</label>
+                          <select class="form-select" id="rooms-select">
+                              <option selected>1</option>
+                              <option>2</option>
+                              <option>3</option>
+                          </select>
+                      </div>
+                      <div class="mb-3">
+                          <label for="adults-select" class="form-label">Adults</label>
+                          <select class="form-select" id="adults-select">
+                              <option selected>2</option>
+                              <option>1</option>
+                              <option>3</option>
+                              <option>4</option>
+                          </select>
+                      </div>
+                      <div class="mb-3">
+                          <label for="children-select" class="form-label">Children</label>
+                          <select class="form-select" id="children-select">
+                              <option selected>0</option>
+                              <option>1</option>
+                              <option>2</option>
+                          </select>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Apply</button>
+                  </form>
+              </div>
           </div>
-        </div>
+    
+   
+               
       </div>
     </div>
 

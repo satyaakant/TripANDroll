@@ -262,9 +262,6 @@ function updateDisplay() {
   bookingFormRound.style.display = 'none';
 }
 
-
-
-
 // Travel & class dropdown
 function toggleBookingFormOneWay() {
   const bookingFormOneWay = document.getElementById('bookingFormOneWay');
@@ -278,29 +275,53 @@ function toggleBookingFormRound() {
 }
 
 //one way date display
+// document.addEventListener('DOMContentLoaded', function() {
+//   const h4Element = document.getElementById('dateDisplay');
+//   const spanElement = document.querySelector('.date-selector');
+//   const inputElement = document.getElementById('departureDateOneWay');
+//   const dateContainer = document.getElementById('dateContainer');
+
+//   // Show the input element on click of the div
+//   dateContainer.addEventListener('click', function() {
+//     inputElement.style.display = 'inline'; // Display the input
+//     inputElement.focus(); // Focus on the input
+//   });
+
+//   // Update the date display when a date is selected
+//   inputElement.addEventListener('change', function() {
+//     const selectedDate = new Date(this.value);
+//     const day = selectedDate.getDate();
+//     const month = selectedDate.toLocaleString('default', { month: 'short' });
+//     const year = selectedDate.getFullYear();
+
+//     h4Element.textContent = day;
+//     spanElement.textContent = `${month}'${year}`;
+//     inputElement.style.display = 'none'; // Hide the input after selection
+//   });
+// });
+
 document.addEventListener('DOMContentLoaded', function() {
-  const h4Element = document.getElementById('dateDisplay');
-  const spanElement = document.querySelector('.date-selector');
-  const inputElement = document.getElementById('departureDateOneWay');
-  const dateContainer = document.getElementById('dateContainer');
-
-  // Show the input element on click of the div
-  dateContainer.addEventListener('click', function() {
-    inputElement.style.display = 'inline'; // Display the input
-    inputElement.focus(); // Focus on the input
+  // Toggle for the Rooms & Guests dropdown
+  const toggleButton = document.getElementById('dropdownMenuButton1');
+  toggleButton.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('roomDropdown');
+      // Toggle the visibility
+      dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
+      event.stopPropagation(); // Stop the event from propagating
   });
 
-  // Update the date display when a date is selected
-  inputElement.addEventListener('change', function() {
-    const selectedDate = new Date(this.value);
-    const day = selectedDate.getDate();
-    const month = selectedDate.toLocaleString('default', { month: 'short' });
-    const year = selectedDate.getFullYear();
-
-    h4Element.textContent = day;
-    spanElement.textContent = `${month}'${year}`;
-    inputElement.style.display = 'none'; // Hide the input after selection
+  // Listen for clicks outside the dropdown to close it
+  document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('roomDropdown');
+      if (!dropdown.contains(event.target) && dropdown.style.display === 'block') {
+          dropdown.style.display = 'none';
+      }
   });
+
+  // Prevent clicks inside the dropdown from closing it
+  document.getElementById('roomDropdown').addEventListener('click', function(event) {
+      event.stopPropagation();
+  });
 });
 
 function addRoom() {

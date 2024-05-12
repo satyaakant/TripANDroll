@@ -125,21 +125,21 @@ function loadAirports() {
   fetch('db/flights/airport.json')
   .then(response => response.json())
   .then(data => {
-    populateDropdown(data, 'cityOneWayDropdownFrom', 'defaultOneWayCity', 'defaultOneWayAirport', 'toggleDropdownFlight("cityOneWayDropdownFrom")');
-    populateDropdown(data, 'cityOneWayDropdownTo', 'defaultOneWayCityTo', 'defaultOneWayAirportTo', 'toggleDropdownFlight("cityOneWayDropdownTo")');
-    populateDropdown(data, 'cityRoundDropdownFrom', 'defaultRoundCity', 'defaultRoundAirport', 'toggleDropdownFlight("cityRoundDropdownFrom")');
-    populateDropdown(data, 'cityRoundDropdownTo', 'defaultRoundCityTo', 'defaultRoundAirportTo', 'toggleDropdownFlight("cityRoundDropdownTo")');
+      populateDropdown(data, 'cityOneWayDropdownFrom', 'defaultOneWayCity', 'defaultOneWayAirport', 'toggleDropdownFlight("cityOneWayDropdownFrom")', 'OneWay');
+      populateDropdown(data, 'cityOneWayDropdownTo', 'defaultOneWayCityTo', 'defaultOneWayAirportTo', 'toggleDropdownFlight("cityOneWayDropdownTo")', 'OneWay');    
+      populateDropdown(data, 'cityRoundDropdownFrom', 'defaultRoundCity', 'defaultRoundAirport', 'toggleDropdownFlight("cityRoundDropdownFrom")', 'Round');
+      populateDropdown(data, 'cityRoundDropdownTo', 'defaultRoundCityTo', 'defaultRoundAirportTo', 'toggleDropdownFlight("cityRoundDropdownTo")', 'Round');
     })
     .catch(error => console.error('Error loading airport data:', error));
 }
 
 // Populate dropdown with city and airport information
-function populateDropdown(data, dropdownId, cityId, airportId, toggleFunction) {
+function populateDropdown(data, dropdownId, cityId, airportId, toggleFunction, tripType) {
   const cityDropdown = document.getElementById(dropdownId);
   cityDropdown.innerHTML = `
     <span class="ms-3">${dropdownId.includes("From") ? "From" : "To"}:</span><br>
     <div>
-      <input style="width:90%" class="ms-3" type="text" id="searchInput${dropdownId.includes("From") ? "From" : "To"}" placeholder="Search City" onkeyup="filterCitiesFlight('${dropdownId}', 'searchInput${dropdownId.includes("From") ? "From" : "To"}')">
+      <input style="width:90%" class="ms-3" type="text" id="searchInput${dropdownId.includes("From") ? "From" : "To"}${tripType}" placeholder="Search City" onkeyup="filterCitiesFlight('${dropdownId}', 'searchInput${dropdownId.includes("From") ? "From" : "To"}${tripType}')">
     </div>
   `;
 
@@ -176,6 +176,7 @@ function populateDropdown(data, dropdownId, cityId, airportId, toggleFunction) {
     cityDropdown.appendChild(option);
   });
 }
+
 
 // Travel & class dropdown
 // function toggleBookingForm(type) {

@@ -82,44 +82,21 @@
           </div>
         </div>
 
-          <div class="border-end px-2 dbba" style="overflow-x: scroll" display="block"; >
-              <span class="btn btn-light dropdown-toggle form-control"  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                  Rooms & Guests
-              </span>
-              <div class="dropdown-menu p-3" style="width: 200px;">
-                  <form>
-                      <div class="mb-3">
-                          <label for="rooms-select" class="form-label">Rooms</label>
-                          <select class="form-select" id="rooms-select">
-                              <option selected>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                          </select>
-                      </div>
-                      <div class="mb-3">
-                          <label for="adults-select" class="form-label">Adults</label>
-                          <select class="form-select" id="adults-select">
-                              <option selected>2</option>
-                              <option>1</option>
-                              <option>3</option>
-                              <option>4</option>
-                          </select>
-                      </div>
-                      <div class="mb-3">
-                          <label for="children-select" class="form-label">Children</label>
-                          <select class="form-select" id="children-select">
-                              <option selected>0</option>
-                              <option>1</option>
-                              <option>2</option>
-                          </select>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Apply</button>
-                  </form>
-              </div>
+        <div class="bookingForm">
+          <div class="roomGuestToggle" id="dropdownMenuButton1" onclick="toggleRoomDropdown()">
+              <span>Rooms & Guests</span>
+              <p id="defaultInfo">Rooms: 0, Adults: 0, Children: 0</p>
           </div>
-    
-   
-               
+          <div class="dropdown-menu p-3" id="roomDropdown" style="width: 300px; display: none;">
+              <div id="roomCardsContainer">
+                  <!-- Room cards will be displayed here -->
+              </div>
+              <button type="button" class="btn btn-primary mt-2" onclick="addRoom()">Add Room</button>
+              <div id="roomDetails" style="margin-top: 20px;"></div>
+              <button type="button" class="btn btn-primary mt-2" onclick="updateDefaultInfo()">Apply All Changes</button>
+          </div>
+      </div>
+      
       </div>
     </div>
 
@@ -148,17 +125,17 @@
         <!-- Content for one way flights -->
         <div class="border-end px-2 position-relative dbba" style="width: 350px;">
           <small>From</small>
-          <div class="ms-3 mt-2">
+          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityDropdownFrom')">
             <h4 style="margin-bottom: 0;">Delhi</h4>
             <small style="white-space: nowrap;">DEL, Delhi Airport India</small>
           </div>
-          <div class="swapArrows position-absolute top-50 translate-middle px-1"
+          <div onclick="swapCities()"  class="swapArrows position-absolute top-50 translate-middle px-1"
             style="right: -22px; background-color: lightblue; border-radius: 50px; cursor: pointer;">
             ⇄</div>
         </div>
         <div class=" border-end ps-4 pe-2 dbba" style="width: 300px;">
           <span>To</span>
-          <div class="ms-3 mt-2">
+          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityDropdownTo')">
             <h4 style="margin-bottom: 0;">Bengaluru</h4>
             <small style="white-space: nowrap;">BLR, Bangalore Airport India</small>
           </div>

@@ -42,11 +42,6 @@ fetch('db/hotel/india_cities.json')
   .catch(error => console.error('Error loading city data:', error));
 
 
-// Setup search button listener
-// document.getElementById('searchButton').addEventListener('click', function() {
-//   const searchQuery = document.getElementById('searchInput').value;
-//   filterHotels(searchQuery);
-// });
 
 function toggleDropdown() {
   const dropdown = document.getElementById('cityDropdownHotelFrom');
@@ -55,6 +50,7 @@ function toggleDropdown() {
   } else {
     dropdown.style.display = 'none';
   }
+
 }
 function filterCities() {
   var input = document.getElementById('searchCityInputHotel');
@@ -225,19 +221,79 @@ function updateDisplay() {
   const bookingForm = document.getElementById('bookingForm');
   bookingForm.style.display = 'none';
 }
-// // Assuming jQuery and Bootstrap are included
-$(document).ready(function() {
-  $('.dropdown-menu form').click(function(e) {
-      e.stopPropagation(); // Prevent form from closing dropdown
+document.addEventListener('DOMContentLoaded', function() {
+  // Toggle for the Rooms & Guests dropdown
+  const toggleButton = document.getElementById('dropdownMenuButton1');
+  toggleButton.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('roomDropdown');
+      // Toggle the visibility
+      dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
+      event.stopPropagation(); // Stop the event from propagating
   });
 
-  $('form').on('submit', function(e) {
-      e.preventDefault(); // Prevent actual form submission
-      const rooms = $('#rooms-select').val();
-      const adults = $('#adults-select').val();
-      const children = $('#children-select').val();
-      // Perform your action here
-      alert(`Rooms: ${rooms}, Adults: ${adults}, Children: ${children}`);
-      $('.dropdown').dropdown('hide'); // Hide dropdown after submission
+  // Listen for clicks outside the dropdown to close it
+  document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('roomDropdown');
+      if (!dropdown.contains(event.target) && dropdown.style.display === 'block') {
+          dropdown.style.display = 'none';
+      }
+  });
+
+  // Prevent clicks inside the dropdown from closing it
+  document.getElementById('roomDropdown').addEventListener('click', function(event) {
+      event.stopPropagation();
   });
 });
+
+function addRoom() {
+  const roomDetails = document.getElementById('roomDetails');
+  const roomNumber = document.querySelectorAll('#roomCardsContainer .room-card').length + 1;
+  roomDetails.innerHTML = `
+      <div>
+          <h5>Room ${roomNumber}</h5>
+          <label>Adults:</label>
+          <input type="number" id="adultsInput${roomNumber}" min="1" value="1" class="form-control">
+          <label>Children:</label>
+          <input type="number" id="childrenInput${roomNumber}" min="0" value="0" class="form-control">
+          <button class="btn btn-success mt-2" onclick="applyRoomDetails(${roomNumber})">Apply Room</button>
+      </div>
+  `;
+}
+
+function applyRoomDetails(roomNumber) {
+  const adultsInput = document.getElementById(`adultsInput${roomNumber}`);
+  const childrenInput = document.getElementById(`childrenInput${roomNumber}`);
+  const adults = adultsInput.value;
+  const children = childrenInput.value;
+
+  const roomCardsContainer = document.getElementById('roomCardsContainer');
+  const roomCard = document.createElement('div');
+  roomCard.className = 'room-card';
+  roomCard.innerHTML = `
+      <h5>Room ${roomNumber}</h5>
+      <p>Adults: ${adults}</p>
+      <p>Children: ${children}</p>
+  `;
+  roomCardsContainer.appendChild(roomCard);
+
+  // Clear inputs for new room details
+  document.getElementById('roomDetails').innerHTML = '';
+}
+
+function updateDefaultInfo() {
+  const rooms = document.querySelectorAll('#roomCardsContainer .room-card');
+  let totalAdults = 0, totalChildren = 0;
+  rooms.forEach(room => {
+      totalAdults += parseInt(room.querySelector('p:nth-child(2)').textContent.split(': ')[1]);
+      totalChildren += parseInt(room.querySelector('p:nth-child(3)').textContent.split(': ')[1]);
+  });
+
+  const defaultInfo = document.getElementById('defaultInfo');
+  defaultInfo.textContent = `Rooms: ${rooms.length}, Adults: ${totalAdults}, Children: ${totalChildren}`;
+
+  // Close the dropdown after applying changes
+  document.getElementById('roomDropdown').style.display = 'none';
+}
+
+
+

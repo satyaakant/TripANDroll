@@ -125,38 +125,88 @@
         <!-- Content for one way flights -->
         <div class="border-end px-2 position-relative dbba" style="width: 350px;">
           <small>From</small>
-          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityDropdownFrom')">
-            <h4 style="margin-bottom: 0;">Delhi</h4>
-            <small style="white-space: nowrap;">DEL, Delhi Airport India</small>
+          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityOneWayDropdownFrom')">
+            <h4 id="defaultOneWayCity" style="margin-bottom: 0;">Delhi</h4>
+            <small style="white-space: nowrap;" id="defaultOneWayAirport">DEL, Delhi Airport India</small>
           </div>
-          <div onclick="swapCities()"  class="swapArrows position-absolute top-50 translate-middle px-1"
+          <div onclick="swapCitiesOneWay()" class="swapArrows position-absolute top-50 translate-middle px-1"
             style="right: -22px; background-color: lightblue; border-radius: 50px; cursor: pointer;">
             ⇄</div>
         </div>
+        <div class="dropdown" style="position: absolute; display: inline-block; transform: translateY(95px); width: 300px;">
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="cityOneWayDropdownFrom"
+            style="display: none; height: 400px; overflow-y: scroll; overflow-x: hidden;">
+            <!-- Options will be dynamically loaded here -->
+          </ul>
+        </div>
         <div class=" border-end ps-4 pe-2 dbba" style="width: 300px;">
           <span>To</span>
-          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityDropdownTo')">
-            <h4 style="margin-bottom: 0;">Bengaluru</h4>
-            <small style="white-space: nowrap;">BLR, Bangalore Airport India</small>
+          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityOneWayDropdownTo')">
+            <h4 id="defaultOneWayCityTo" style="margin-bottom: 0;">Bengaluru</h4>
+            <small style="white-space: nowrap;" id="defaultOneWayAirportTo">BLR, Bangalore Airport India</small>
+          </div>
+          <div class="dropdown" style="position: absolute; display: inline-block; width: 300px;">
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="cityOneWayDropdownTo"
+              style="display: none; height: 400px; overflow-y: scroll; overflow-x: hidden;">
+              <!-- Options will be dynamically loaded here -->
+            </ul>
           </div>
         </div>
 
         <div id="datePickerContainer" style="display: flex !important;">
           <div class="border-end px-2 dbba" style="width: 200px;">
             <small>Departure</small>
-            <div class="ms-3 mt-2">
-              <input type="date" id="departureDate" name="departureDate">
+            <div class="ms-3 mt-2" class="dateContainer">
+              <h4 id="dateDisplay" style="margin-bottom: 0; display: inline;">12</h4><span>&nbsp;May'24</span><br>
+              <small style="white-space: nowrap;">Day</small>
+              <input type="date" id="departureDateOneWay" name="departureDateOneWay">
             </div>
           </div>
         </div>
 
-        <div class="display-area px-2 dbba">
+        <div class="display-area px-2 dbba" onclick="toggleBookingFormOneWay()">
           <div>
             <small>Travellers & Class</small>
             <div class="ms-3 mt-2">
-              <h4 style="margin-bottom: 0; display: inline;">0</h4><span>&nbsp;Traveller</span><br>
-              <small style="white-space: nowrap;">Business</small>
+              <h4 style="margin-bottom: 0; display: inline;" id="numTravellersOneWay">0</h4><span>&nbsp;Traveller</span><br>
+              <small style="white-space: nowrap;" id="travelClassOneWay">Business</small>
             </div>
+          </div>
+          <div class="booking-form p-3 card" id="bookingFormOneWay"
+            style="display: none; position: absolute; right: 0; transform: scale(80%);">
+            <div class="booking-form-header"
+              style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <h5>Booking Form</h5>
+              <button class="btn btn-sm" onclick="toggleBookingFormOneWay()">X</button>
+            </div>
+            <div class="section" style="margin-bottom: 10px;">
+              <label>ADULTS (12y+)</label>
+              <div class="inputs" id="adultsOneWay"></div>
+            </div>
+            <div class="section" style="margin-bottom: 10px;">
+              <label>CHILDREN (2y-12y)</label>
+              <div class="inputs" id="childrenOneWay"></div>
+            </div>
+            <div class="section" style="margin-bottom: 10px;">
+              <label>INFANTS (below 2y)</label>
+              <div class="inputs" id="infantsOneWay"></div>
+            </div>
+            <div class="section" style="margin-bottom: 10px;">
+              <label>Choose Travel Class:</label>
+              <div class="inputs" id="travelClassButtonsOneWay">
+                <button class="btn btn-outline-primary active"
+                  onclick="updateTravelClass('Business', this)">Business</button>
+                <button class="btn btn-outline-primary" onclick="updateTravelClass('Premium Economy', this)">Premium
+                  Economy</button>
+                <button class="btn btn-outline-primary"
+                  onclick="updateTravelClass('Economy/Premium Economy', this)">Economy/Premium Economy</button>
+              </div>
+            </div>
+
+            <button class="apply-btn btn btn-primary"
+            style="width: 100%; padding: 10px; background-color: blue; color: white; border: none; border-radius: 5px; cursor: pointer;"
+            onclick="updateDisplay(); event.stopPropagation()">APPLY
+    </button>
           </div>
         </div>
       </div>
@@ -165,29 +215,29 @@
         <!-- Content for round trip flights -->
         <div class="border-end px-2 position-relative dbba" style="width: 350px;">
           <small>From</small>
-          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityDropdownFrom')">
-            <h4 id="defaultCity" style="margin-bottom: 0;">Delhi</h4>
-            <small style="white-space: nowrap;" id="defaultAirport">DEL, Delhi Airport India</small>
+          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityRoundDropdownFrom')">
+            <h4 id="defaultRoundCity" style="margin-bottom: 0;">Delhi</h4>
+            <small style="white-space: nowrap;" id="defaultRoundAirport">DEL, Delhi Airport India</small>
           </div>
-          <div onclick="swapCities()" class="swapArrows position-absolute top-50 translate-middle px-1"
+          <div onclick="swapCitiesRound()" class="swapArrows position-absolute top-50 translate-middle px-1"
             style="right: -22px; background-color: lightblue; border-radius: 50px; cursor: pointer;">
             ⇄</div>
         </div>
-        <div class="dropdown" style="position: absolute; display: inline-block; transform: translateY(95px);">
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="cityDropdownFrom"
-            style="display: none; height: 400px; overflow-y: scroll;">
+        <div class="dropdown" style="position: absolute; display: inline-block; transform: translateY(95px); width: 300px;">
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="cityRoundDropdownFrom"
+            style="display: none; height: 400px; overflow-y: scroll; overflow-x: hidden;">
             <!-- Options will be dynamically loaded here -->
           </ul>
         </div>
         <div class=" border-end ps-4 pe-2 dbba" style="width: 300px;">
           <span>To</span>
-          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityDropdownTo')">
-            <h4 id="defaultCityTo" style="margin-bottom: 0;">Bengaluru</h4>
-            <small style="white-space: nowrap;" id="defaultAirportTo">BLR, Bangalore Airport India</small>
+          <div class="ms-3 mt-2" onclick="toggleDropdownFlight('cityRoundDropdownTo')">
+            <h4 id="defaultRoundCityTo" style="margin-bottom: 0;">Bengaluru</h4>
+            <small style="white-space: nowrap;" id="defaultRoundAirportTo">BLR, Bangalore Airport India</small>
           </div>
-          <div class="dropdown" style="position: absolute; display: inline-block;">
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="cityDropdownTo"
-              style="display: none; height: 400px; overflow-y: scroll;">
+          <div class="dropdown" style="position: absolute; display: inline-block; width: 300px;">
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="cityRoundDropdownTo"
+              style="display: none; height: 400px; overflow-y: scroll; overflow-x: hidden;">
               <!-- Options will be dynamically loaded here -->
             </ul>
           </div>
@@ -211,38 +261,38 @@
           </div>
         </div>
 
-        <div class="display-area px-2 dbba" onclick="toggleBookingForm()">
+        <div class="display-area px-2 dbba" onclick="toggleBookingFormRound()">
           <div>
             <small>Travellers & Class</small>
             <div class="ms-3 mt-2">
-              <h4 style="margin-bottom: 0; display: inline;" id="numTravellers">0</h4><span>&nbsp;Traveller</span><br>
-              <small style="white-space: nowrap;" id="travelClass">Business</small>
+              <h4 style="margin-bottom: 0; display: inline;" id="numTravellersRound">0</h4><span>&nbsp;Traveller</span><br>
+              <small style="white-space: nowrap;" id="travelClassRound">Business</small>
             </div>
           </div>
         </div>
         <br>
-        <div class="booking-form p-3 card" id="bookingForm"
+        <div class="booking-form p-3 card" id="bookingFormRound"
           style="display: none; position: absolute; right: 0; transform: scale(80%);">
           <div class="booking-form-header"
             style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
             <h5>Booking Form</h5>
-            <button class="btn btn-sm" onclick="toggleBookingForm()">X</button>
+            <button class="btn btn-sm" onclick="toggleBookingFormRound()">X</button>
           </div>
           <div class="section" style="margin-bottom: 10px;">
             <label>ADULTS (12y+)</label>
-            <div class="inputs" id="adults"></div>
+            <div class="inputs" id="adultsRound"></div>
           </div>
           <div class="section" style="margin-bottom: 10px;">
             <label>CHILDREN (2y-12y)</label>
-            <div class="inputs" id="children"></div>
+            <div class="inputs" id="childrenRound"></div>
           </div>
           <div class="section" style="margin-bottom: 10px;">
             <label>INFANTS (below 2y)</label>
-            <div class="inputs" id="infants"></div>
+            <div class="inputs" id="infantsRound"></div>
           </div>
           <div class="section" style="margin-bottom: 10px;">
             <label>Choose Travel Class:</label>
-            <div class="inputs" id="travelClassButtons">
+            <div class="inputs" id="travelClassButtonsRound">
               <button class="btn btn-outline-primary active"
                 onclick="updateTravelClass('Business', this)">Business</button>
               <button class="btn btn-outline-primary" onclick="updateTravelClass('Premium Economy', this)">Premium

@@ -69,20 +69,30 @@ function filterCities() {
   }
 }
 
-
-
 //flight container js
 // Swap flight cities
-function swapCities() {
-  var fromCity = document.getElementById('defaultCity').innerText;
-  var fromAirport = document.getElementById('defaultAirport').innerText;
-  var toCity = document.getElementById('defaultCityTo').innerText;
-  var toAirport = document.getElementById('defaultAirportTo').innerText;
+function swapCitiesOneWay() {
+  var fromOneWayCity = document.getElementById('defaultOneWayCity').innerText;
+  var fromOneWayAirport = document.getElementById('defaultOneWayAirport').innerText;
+  var toOneWayCity = document.getElementById('defaultOneWayCityTo').innerText;
+  var toOneWayAirport = document.getElementById('defaultOneWayAirportTo').innerText;
 
-  document.getElementById('defaultCity').innerText = toCity;
-  document.getElementById('defaultAirport').innerText = toAirport;
-  document.getElementById('defaultCityTo').innerText = fromCity;
-  document.getElementById('defaultAirportTo').innerText = fromAirport;
+  document.getElementById('defaultOneWayCity').innerText = toOneWayCity;
+  document.getElementById('defaultOneWayAirport').innerText = toOneWayAirport;
+  document.getElementById('defaultOneWayCityTo').innerText = fromOneWayCity;
+  document.getElementById('defaultOneWayAirportTo').innerText = fromOneWayAirport;
+}
+
+function swapCitiesRound() {
+  var fromRoundCity = document.getElementById('defaultRoundCity').innerText;
+  var fromRoundAirport = document.getElementById('defaultRoundAirport').innerText;
+  var toRoundCity = document.getElementById('defaultRoundCityTo').innerText;
+  var toRoundAirport = document.getElementById('defaultRoundAirportTo').innerText;
+  
+  document.getElementById('defaultRoundCity').innerText = toRoundCity;
+  document.getElementById('defaultRoundAirport').innerText = toRoundAirport;
+  document.getElementById('defaultRoundCityTo').innerText = fromRoundCity;
+  document.getElementById('defaultRoundAirportTo').innerText = fromRoundAirport;
 }
 
 // Toggle dropdown
@@ -113,11 +123,12 @@ function filterCitiesFlight(dropdownId, inputId) {
 // Load airport data from airport.json
 function loadAirports() {
   fetch('db/flights/airport.json')
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
-      populateDropdown(data, 'cityDropdownFrom', 'defaultCity', 'defaultAirport', 'toggleDropdownFlight("cityDropdownFrom")');
-      populateDropdown(data, 'cityDropdownTo', 'defaultCityTo', 'defaultAirportTo', 'toggleDropdownFlight("cityDropdownTo")');
+  .then(response => response.json())
+  .then(data => {
+    populateDropdown(data, 'cityOneWayDropdownFrom', 'defaultOneWayCity', 'defaultOneWayAirport', 'toggleDropdownFlight("cityOneWayDropdownFrom")');
+    populateDropdown(data, 'cityOneWayDropdownTo', 'defaultOneWayCityTo', 'defaultOneWayAirportTo', 'toggleDropdownFlight("cityOneWayDropdownTo")');
+    populateDropdown(data, 'cityRoundDropdownFrom', 'defaultRoundCity', 'defaultRoundAirport', 'toggleDropdownFlight("cityRoundDropdownFrom")');
+    populateDropdown(data, 'cityRoundDropdownTo', 'defaultRoundCityTo', 'defaultRoundAirportTo', 'toggleDropdownFlight("cityRoundDropdownTo")');
     })
     .catch(error => console.error('Error loading airport data:', error));
 }
@@ -167,10 +178,10 @@ function populateDropdown(data, dropdownId, cityId, airportId, toggleFunction) {
 }
 
 // Travel & class dropdown
-function toggleBookingForm() {
-  const bookingForm = document.getElementById('bookingForm');
-  bookingForm.style.display = bookingForm.style.display === 'none' ? 'block' : 'none';
-}
+// function toggleBookingForm(type) {
+//   const bookingForm = document.getElementById(`bookingForm${type}`);
+//   bookingForm.style.display = bookingForm.style.display === 'none' ? 'block' : 'none';
+// }
 
 document.addEventListener("DOMContentLoaded", function() {
   generateButtons('adults', 11);
@@ -180,68 +191,115 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function generateButtons(section, count) {
-  const container = document.getElementById(section);
+  const containerOneWay = document.getElementById(`${section}OneWay`);
+  const containerRound = document.getElementById(`${section}Round`);
+  
   for (let i = 0; i < count; i++) {
-    const button = document.createElement('button');
-    button.textContent = i;
-    button.className = 'btn btn-outline-primary';
-    button.onclick = function() { setActive(button, section); updateTravelers(); };
-    container.appendChild(button);
+    const buttonOneWay = document.createElement('button');
+    buttonOneWay.textContent = i;
+    buttonOneWay.className = 'btn btn-outline-primary';
+    buttonOneWay.onclick = function() { setActive(buttonOneWay, section, 'OneWay'); updateTravelers(section); };
+    containerOneWay.appendChild(buttonOneWay);
+
+    const buttonRound = document.createElement('button');
+    buttonRound.textContent = i;
+    buttonRound.className = 'btn btn-outline-primary';
+    buttonRound.onclick = function() { setActive(buttonRound, section, 'Round'); updateTravelers(section); };
+    containerRound.appendChild(buttonRound);
   }
 }
 
-function setActive(button, section) {
-  const buttons = document.querySelectorAll(`#${section} button`);
+function setActive(button, section, type) {
+  const buttons = document.querySelectorAll(`#${section}${type} button`);
   buttons.forEach(btn => btn.classList.remove('active'));
   button.classList.add('active');
 }
 
-function updateTravelers() {
-  let total = 0;
-  const sections = ['adults', 'children', 'infants'];
-  sections.forEach(section => {
+function updateTravelers(section) {
+  let totalOneWay = 0;
+  let totalRound = 0;
+
+  const sectionsOneWay = ['adultsOneWay', 'childrenOneWay', 'infantsOneWay'];
+  const sectionsRound = ['adultsRound', 'childrenRound', 'infantsRound'];
+
+  sectionsOneWay.forEach(section => {
     const activeButton = document.querySelector(`#${section} .active`);
     if (activeButton) {
-      total += parseInt(activeButton.textContent);
+      totalOneWay += parseInt(activeButton.textContent);
     }
   });
-  const numTravellers = document.getElementById('numTravellers');
-  numTravellers.textContent = total;
-  numTravellers.nextElementSibling.textContent = total === 1 ? ' Traveller' : ' Travellers';
+
+  sectionsRound.forEach(section => {
+    const activeButton = document.querySelector(`#${section} .active`);
+    if (activeButton) {
+      totalRound += parseInt(activeButton.textContent);
+    }
+  });
+
+  const numTravellersOneWay = document.getElementById('numTravellersOneWay');
+  const numTravellersRound = document.getElementById('numTravellersRound');
+  numTravellersOneWay.textContent = totalOneWay;
+  numTravellersRound.textContent = totalRound;
+  numTravellersOneWay.nextElementSibling.textContent = totalOneWay === 1 ? ' Traveller' : ' Travellers';
+  numTravellersRound.nextElementSibling.textContent = totalRound === 1 ? ' Traveller' : ' Travellers';
 }
 
+
 function updateTravelClass(selectedClass, button) {
-  const travelClassButtons = document.querySelectorAll('#travelClassButtons button');
-  travelClassButtons.forEach(btn => btn.classList.remove('active'));
+  const travelClassButtonsOneWay = document.querySelectorAll('#travelClassButtonsOneWay button');
+  const travelClassButtonsRound = document.querySelectorAll('#travelClassButtonsRound button');
+  travelClassButtonsOneWay.forEach(btn => btn.classList.remove('active'));
+  travelClassButtonsRound.forEach(btn => btn.classList.remove('active'));
   button.classList.add('active');
-  document.getElementById('travelClass').textContent = selectedClass;
+  document.getElementById('travelClassOneWay').textContent = selectedClass;
+  document.getElementById('travelClassRound').textContent = selectedClass;
 }
 
 function updateDisplay() {
-  const bookingForm = document.getElementById('bookingForm');
-  bookingForm.style.display = 'none';
+  const bookingFormOneWay = document.getElementById('bookingFormOneWay');
+  const bookingFormRound = document.getElementById('bookingFormRound');
+  bookingFormOneWay.style.display = 'none';
+  bookingFormRound.style.display = 'none';
 }
+
+
+
+
+// Travel & class dropdown
+function toggleBookingFormOneWay() {
+  const bookingFormOneWay = document.getElementById('bookingFormOneWay');
+  if (!event.target.closest("#bookingFormOneWay")) {
+    bookingFormOneWay.style.display = bookingFormOneWay.style.display === 'none' ? 'block' : 'none';
+  }
+}
+function toggleBookingFormRound() {
+  const bookingFormRound = document.getElementById('bookingFormRound');
+  bookingFormRound.style.display = bookingFormRound.style.display === 'none' ? 'block' : 'none'; 
+}
+
+//one way date display
 document.addEventListener('DOMContentLoaded', function() {
-  // Toggle for the Rooms & Guests dropdown
-  const toggleButton = document.getElementById('dropdownMenuButton1');
-  toggleButton.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('roomDropdown');
-      // Toggle the visibility
-      dropdown.style.display = (dropdown.style.display === 'none' || dropdown.style.display === '') ? 'block' : 'none';
-      event.stopPropagation(); // Stop the event from propagating
+  const h4Element = document.getElementById('dateDisplay');
+  const spanElement = document.querySelector('.date-selector');
+  const inputElement = document.getElementById('departureDateOneWay');
+  const dateContainer = document.getElementById('dateContainer');
+
+  // Show the input element on click of the div
+  dateContainer.addEventListener('click', function() {
+    inputElement.style.display = 'inline'; // Display the input
+    inputElement.focus(); // Focus on the input
   });
 
-  // Listen for clicks outside the dropdown to close it
-  document.addEventListener('click', function(event) {
-      const dropdown = document.getElementById('roomDropdown');
-      if (!dropdown.contains(event.target) && dropdown.style.display === 'block') {
-          dropdown.style.display = 'none';
-      }
-  });
+  // Update the date display when a date is selected
+  inputElement.addEventListener('change', function() {
+    const selectedDate = new Date(this.value);
+    const day = selectedDate.getDate();
+    const month = selectedDate.toLocaleString('default', { month: 'short' });
+    const year = selectedDate.getFullYear();
 
-  // Prevent clicks inside the dropdown from closing it
-  document.getElementById('roomDropdown').addEventListener('click', function(event) {
-      event.stopPropagation();
+    h4Element.textContent = day;
+    spanElement.textContent = `${month}'${year}`;
+    inputElement.style.display = 'none'; // Hide the input after selection
   });
 });
 

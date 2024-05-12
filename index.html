@@ -59,10 +59,10 @@
           </ul>
         </div>
         
-        <div class="border-end px-2 position-relative dbba" style="width: 350px;">
+        <div class="border-end position-relative dbba" style="width: 350px;">
           <div onclick="toggleDropdown()">
             <span>City, property name or location</span>
-            <h4 id="defaultHotelCity" style="margin-bottom: 0;">Delhi</h4>
+            <h4 id="defaultHotelCity" class="ms-3 mt-2">Delhi</h4>
           </div>
         </div>
         <div class="dateRangePickerContainer" style="display: flex !important; width: 400px;">
@@ -75,17 +75,17 @@
           </div>
           <div class="border-end px-2 dbba" style="width: 200px;">
             <small>Check-out</small>
-            <div class="returnDatepicker">
+            <div class="ms-3 mt-2 returnDatepicker">
               <h4 style="margin-bottom: 0; display: inline;"></h4><span>&nbsp;May'24</span> <br>
               <small style="white-space: nowrap;" id="returnAirportTo">Day</small>
             </div>
           </div>
         </div>
 
-        <div class="bookingForm">
+        <div class="bookingForm p-2">
           <div class="roomGuestToggle" id="dropdownMenuButton1" onclick="toggleRoomDropdown()">
               <span>Rooms & Guests</span>
-              <p id="defaultInfo">Rooms: 0, Adults: 0, Children: 0</p>
+              <p id="defaultInfo" class="ms-3 mt-2">Rooms: 0, Adults: 0, Children: 0</p>
           </div>
           <div class="dropdown-menu p-3" id="roomDropdown" style="width: 300px; display: none;">
               <div id="roomCardsContainer">
@@ -159,7 +159,7 @@
             <div class="ms-3 mt-2" class="dateContainer">
               <h4 id="dateDisplay" style="margin-bottom: 0; display: inline;">12</h4><span>&nbsp;May'24</span><br>
               <small style="white-space: nowrap;">Day</small>
-              <input type="date" id="departureDateOneWay" name="departureDateOneWay">
+              <!-- <input type="date" id="departureDateOneWay" name="departureDateOneWay" hidden> -->
             </div>
           </div>
         </div>
@@ -323,7 +323,7 @@
     <br>
     <br>
     <div style="text-align: center; width: 100%; display: flex; justify-content: center;">
-      <a class="searchBtn" href="/" style="color: white; text-decoration: none;">
+      <a id="searchBtn" style="color: white; text-decoration: none;">
         <p class="search py-4"
           style="width: 200px; height: 30px; background: linear-gradient(90deg, rgba(76,170,253,1) 0%, rgba(10,95,244,1) 100%); border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; letter-spacing: 1px;">
           SEARCH
@@ -394,6 +394,108 @@
       $('#returnDatepicker h4').text(defaultReturnDate.format('D'));
       $('#returnDatepicker span').text(defaultReturnDate.format('MMM\'YY'));
       $('#returnDatepicker small').text(defaultReturnDate.format('dddd'));
+    });
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("searchBtn").addEventListener("click", function() {
+        var activeTab = document.querySelector('.nav-pills .nav-link.active');
+        console.log("Active tab ID:", activeTab.id);
+        
+        if (activeTab && activeTab.id === "pills-hotel-tab") {
+          var hotelContainer = document.getElementById("hotelContainer");
+          
+          var city = hotelContainer.querySelector("#defaultHotelCity").textContent.trim();
+          var checkIn = hotelContainer.querySelector(".departureDatepicker h4").textContent.trim();
+          var checkOut = hotelContainer.querySelector(".returnDatepicker h4").textContent.trim();
+          
+          var roomGuestInfo = hotelContainer.querySelector("#defaultInfo").textContent.trim();
+          var roomGuestInfoArr = roomGuestInfo.split(",");
+          var roomCount = parseInt(roomGuestInfoArr[0].match(/\d+/)[0]);
+          var adultCount = parseInt(roomGuestInfoArr[1].match(/\d+/)[0]);
+          var childCount = parseInt(roomGuestInfoArr[2].match(/\d+/)[0]);
+          
+          var childAges = [];
+          var childAgeInputs = document.querySelectorAll(".childAgeInput");
+          childAgeInputs.forEach(function(input) {
+            childAges.push(parseInt(input.value));
+          });
+          
+          var hotelData = {
+            city: city,
+            "check-in": checkIn,
+            "check-out": checkOut,
+            "room&guest": {
+              rooms: roomCount,
+              adults: adultCount,
+              children: childCount,
+              "children-age": childAges
+            }
+          };
+          
+          console.log("Hotel data:", hotelData);
+        } else if (activeTab && activeTab.id === "pills-flight-tab") {
+          var subTabs = document.querySelectorAll('#pills-flight-tablist .nav-link');
+            var activeSubTab = null;
+            subTabs.forEach(function(subTab) {
+                if (subTab.classList.contains('active')) {
+                    activeSubTab = subTab;
+                    return;
+                }
+            });
+            // console.log("Active sub-tab ID:", activeSubTab ? activeSubTab.id : "None");
+
+            if (activeSubTab) {
+                if (activeSubTab.id === "pills-fixed-departure-tab") {
+                    console.log("One way selected");
+                    // One way flight search code
+                    var cityFrom = document.getElementById("defaultOneWayCity").textContent.trim();
+                    var cityTo = document.getElementById("defaultOneWayCityTo").textContent.trim();
+                    var departureDate = document.getElementById("dateDisplay").textContent.trim();
+                    var numTravellers = parseInt(document.getElementById("numTravellersOneWay").textContent.trim());
+                    var travelClass = document.getElementById("travelClassOneWay").textContent.trim();
+
+                    var flightData = {
+                        cityFrom: cityFrom,
+                        cityTo: cityTo,
+                        departureDate: departureDate,
+                        "travellers&class": {
+                            numTravellers: numTravellers,
+                            travelClass: travelClass
+                        }
+                    };
+
+                    console.log("One way flight data:", flightData);
+                } else if (activeSubTab.id === "pills-Villa-tab") {
+                    console.log("Round trip selected");
+                    // Round trip flight search code
+                    var cityFromRound = document.getElementById("defaultRoundCity").textContent.trim();
+                    var cityToRound = document.getElementById("defaultRoundCityTo").textContent.trim();
+                    var departureDateRound = document.getElementById("dateDisplay").textContent.trim();
+                    var returnDateRound = document.getElementById("returnDatepicker").textContent.trim();
+                    var numTravellersRound = parseInt(document.getElementById("numTravellersRound").textContent.trim());
+                    var travelClassRound = document.getElementById("travelClassRound").textContent.trim();
+
+                    var roundTripFlightData = {
+                        cityFrom: cityFromRound,
+                        cityTo: cityToRound,
+                        departureDate: departureDateRound,
+                        returnDate: returnDateRound,
+                        "travellers&class": {
+                            numTravellers: numTravellersRound,
+                            travelClass: travelClassRound
+                        }
+                    };
+
+                    console.log("Round trip flight data:", roundTripFlightData);
+                } else if (activeSubTab.id === "pills-visa-tab") {
+                    console.log("Multi city selected");
+                    // Multi city flight search code
+                }
+            }
+        }
+      });
     });
   </script>
 </body>

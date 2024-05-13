@@ -298,34 +298,44 @@ function addRoom() {
   const roomDetails = document.getElementById('roomDetails');
   const roomNumber = document.querySelectorAll('#roomCardsContainer .room-card').length + 1;
   roomDetails.innerHTML = `
-      <div class="card p-2">
-          <h5>Room ${roomNumber}</h5>
-          <label>Adults:</label>
-          <input type="number" id="adultsInput${roomNumber}" min="1" value="1" class="form-control">
-          <label>Children:</label>
-          <input type="number" id="childrenInput${roomNumber}" min="0" value="0" class="form-control">
-          <button class="btn btn-success mt-2" onclick="applyRoomDetails(${roomNumber})">Apply Room</button>
-      </div>
+  <div class="card p-2">
+  <h5>Room ${roomNumber}</h5>
+  <label>Adults:</label>
+  <input type="number" id="adultsInput${roomNumber}" min="1" value="1" class="form-control">
+  <label>Children:</label>
+  <button type="button" class="btn btn-primary mt-2" onclick="addChildInput('childrenAges${roomNumber}')">Add Child</button>
+  <div id="childrenAges${roomNumber}"></div>
+  <button class="btn btn-success mt-2" onclick="applyRoomDetails(${roomNumber})">Apply Room</button>
+</div>
   `;
+}
+function addChildInput(containerId) {
+  const container = document.getElementById(containerId);
+  const childDiv = document.createElement('div');
+  childDiv.innerHTML = `
+      <select class="form-control mt-2">
+          ${Array.from({ length: 16 }, (_, i) => `<option value="${i}">${i}</option>`).join('')}
+      </select>`;
+  container.appendChild(childDiv);
 }
 
 function applyRoomDetails(roomNumber) {
   const adultsInput = document.getElementById(`adultsInput${roomNumber}`);
-  const childrenInput = document.getElementById(`childrenInput${roomNumber}`);
+  const childrenContainers = document.querySelectorAll(`#childrenAges${roomNumber} select`);
   const adults = adultsInput.value;
-  const children = childrenInput.value;
+  const children = Array.from(childrenContainers).map(select => select.value);
 
   const roomCardsContainer = document.getElementById('roomCardsContainer');
   const roomCard = document.createElement('div');
-  roomCard.className = 'room-card card p-2';
+  roomCard.className = 'room-card';
   roomCard.innerHTML = `
       <h5>Room ${roomNumber}</h5>
       <p>Adults: ${adults}</p>
-      <p>Children: ${children}</p>
+      <p>Children: ${children.length} (Age: ${children.join(', ')})</p>
   `;
   roomCardsContainer.appendChild(roomCard);
 
-  // Clear inputs for new room details
+  // Clear current room details to add more rooms
   document.getElementById('roomDetails').innerHTML = '';
 }
 
@@ -343,6 +353,3 @@ function updateDefaultInfo() {
   // Close the dropdown after applying changes
   document.getElementById('roomDropdown').style.display = 'none';
 }
-
-
-

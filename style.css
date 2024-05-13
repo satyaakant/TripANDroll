@@ -30,7 +30,7 @@ body {
   }
   
   .dbba:hover {
-    background-color: #ecf9fe;
+    /* background-color: #ecf9fe; */
     cursor: pointer;
   }
   .dropdown-menu {
@@ -65,3 +65,15 @@ body {
 .roomGuestToggle {
   cursor: pointer; }
   
+  #dateSelectorContainer {
+    display: none; /* Hide the datepicker container by default */
+    position: absolute; /* Set position to relative for absolute positioning */
+  }
+
+  .closeButton {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+      transform: translate(5px,-30px);
+  }

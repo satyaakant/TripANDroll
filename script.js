@@ -179,10 +179,16 @@ function populateDropdown(data, dropdownId, cityId, airportId, toggleFunction, t
 
 
 // Travel & class dropdown
-// function toggleBookingForm(type) {
-//   const bookingForm = document.getElementById(`bookingForm${type}`);
-//   bookingForm.style.display = bookingForm.style.display === 'none' ? 'block' : 'none';
-// }
+function toggleBookingFormOneWay() {
+  const bookingFormOneWay = document.getElementById('bookingFormOneWay');
+  if (!event.target.closest("#bookingFormOneWay")) {
+    bookingFormOneWay.style.display = bookingFormOneWay.style.display === 'none' ? 'block' : 'none';
+  }
+}
+function toggleBookingFormRound() {
+  const bookingFormRound = document.getElementById('bookingFormRound');
+  bookingFormRound.style.display = bookingFormRound.style.display === 'none' ? 'block' : 'none'; 
+}
 
 document.addEventListener("DOMContentLoaded", function() {
   generateButtons('adults', 11);
@@ -263,44 +269,7 @@ function updateDisplay() {
   bookingFormRound.style.display = 'none';
 }
 
-// Travel & class dropdown
-function toggleBookingFormOneWay() {
-  const bookingFormOneWay = document.getElementById('bookingFormOneWay');
-  if (!event.target.closest("#bookingFormOneWay")) {
-    bookingFormOneWay.style.display = bookingFormOneWay.style.display === 'none' ? 'block' : 'none';
-  }
-}
-function toggleBookingFormRound() {
-  const bookingFormRound = document.getElementById('bookingFormRound');
-  bookingFormRound.style.display = bookingFormRound.style.display === 'none' ? 'block' : 'none'; 
-}
-
-//one way date display
-// document.addEventListener('DOMContentLoaded', function() {
-//   const h4Element = document.getElementById('dateDisplay');
-//   const spanElement = document.querySelector('.date-selector');
-//   const inputElement = document.getElementById('departureDateOneWay');
-//   const dateContainer = document.getElementById('dateContainer');
-
-//   // Show the input element on click of the div
-//   dateContainer.addEventListener('click', function() {
-//     inputElement.style.display = 'inline'; // Display the input
-//     inputElement.focus(); // Focus on the input
-//   });
-
-//   // Update the date display when a date is selected
-//   inputElement.addEventListener('change', function() {
-//     const selectedDate = new Date(this.value);
-//     const day = selectedDate.getDate();
-//     const month = selectedDate.toLocaleString('default', { month: 'short' });
-//     const year = selectedDate.getFullYear();
-
-//     h4Element.textContent = day;
-//     spanElement.textContent = `${month}'${year}`;
-//     inputElement.style.display = 'none'; // Hide the input after selection
-//   });
-// });
-
+// rooms and guests hotel
 document.addEventListener('DOMContentLoaded', function() {
   // Toggle for the Rooms & Guests dropdown
   const toggleButton = document.getElementById('dropdownMenuButton1');
@@ -329,7 +298,7 @@ function addRoom() {
   const roomDetails = document.getElementById('roomDetails');
   const roomNumber = document.querySelectorAll('#roomCardsContainer .room-card').length + 1;
   roomDetails.innerHTML = `
-      <div>
+      <div class="card p-2">
           <h5>Room ${roomNumber}</h5>
           <label>Adults:</label>
           <input type="number" id="adultsInput${roomNumber}" min="1" value="1" class="form-control">
@@ -348,7 +317,7 @@ function applyRoomDetails(roomNumber) {
 
   const roomCardsContainer = document.getElementById('roomCardsContainer');
   const roomCard = document.createElement('div');
-  roomCard.className = 'room-card';
+  roomCard.className = 'room-card card p-2';
   roomCard.innerHTML = `
       <h5>Room ${roomNumber}</h5>
       <p>Adults: ${adults}</p>
